@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — ShiftZen</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    body { background: #f5f5f5; }
+    .portfolio-hero { background: linear-gradient(135deg,#667eea,#764ba2); color: white; padding: 4rem 2rem; text-align: center; }
+    .portfolio-hero h1 { font-size: 42px; margin-bottom: .5rem; }
+    .portfolio-hero p  { font-size: 18px; opacity: .9; max-width: 600px; margin: 0 auto; }
+    .portfolio-body { max-width: 1040px; margin: 2rem auto; padding: 0 20px; }
+    .portfolio-body h2 { font-size: 24px; margin-bottom: 1.25rem; color: #667eea; }
+    .section-block { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+    .views { font-size: 13px; color: rgba(255,255,255,.7); margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="portfolio-hero">
+    <h1 id="heroTitle">Loading...</h1>
+    <p  id="heroDesc"></p>
+    <p  id="heroViews" class="views"></p>
+  </div>
+  <div class="portfolio-body">
+    <div class="section-block">
+      <h2>Projects</h2>
+      <div id="pubProjects" class="projects-grid"></div>
+    </div>
+  </div>
+  <script>
+    const slug = window.location.pathname.split('/portfolio/')[1];
+    fetch(`/api/portfolio/${slug}`)
+      .then(r => r.json())
+      .then(portfolio => {
+        document.title = portfolio.title + ' — ShiftZen';
+        document.getElementById('heroTitle').textContent = portfolio.title;
+        document.getElementById('heroDesc').textContent  = portfolio.description || '';
+        document.getElementById('heroViews').textContent = `${portfolio.viewCount} views`;
+        return fetch(`/api/projects/user/${portfolio.userId._id || portfolio.userId}`);
+      })
+      .then(r => r.json())
+      .then(projects => {
+        const container = document.getElementById('pubProjects');
+        if (!projects.length) { container.innerHTML = '<p>No projects yet.</p>'; return; }
+        container.innerHTML = projects.map(p => `
+          <div class="project-card">
+            <span class="type-badge">${p.type}</span>
+            <h3>${p.title}</h3>
+            ${p.description ? `<p class="project-desc">${p.description}</p>` : ''}
+            ${p.tags?.length ? `<div class="project-tags">${p.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>` : ''}
+            <div class="project-links">
+              ${p.link   ? `<a href="${p.link}"   target="_blank">View live</a>` : ''}
+              ${p.github ? `<a href="${p.github}" target="_blank">GitHub</a>`    : ''}
+            </div>
+          </div>`).join('');
+      })
+      .catch(() => document.getElementById('heroTitle').textContent = 'Portfolio not found');
+  </script>
+</body>
+</html>
