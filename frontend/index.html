@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShiftZen — Your Dynamic Portfolio</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="logo">ShiftZen</div>
+      <ul class="nav-links">
+        <li><a href="#" data-section="dashboard">Dashboard</a></li>
+        <li><a href="#" data-section="portfolio">Portfolio</a></li>
+        <li><a href="#" data-section="projects">Projects</a></li>
+        <li><a href="#" data-section="interests">Interests</a></li>
+        <li><a href="#" id="logoutBtn">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div id="authScreen" class="auth-screen">
+    <div class="auth-card">
+      <h1>ShiftZen</h1>
+      <p class="auth-sub">Your dynamic portfolio — always up to date</p>
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">Login</button>
+        <button class="auth-tab" data-tab="register">Register</button>
+      </div>
+      <form id="loginForm" class="form auth-form">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+        <p id="loginError" class="error-msg"></p>
+      </form>
+      <form id="registerForm" class="form auth-form hidden">
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" id="regUsername" placeholder="yourname" required />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="regEmail" placeholder="you@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="regPassword" placeholder="Password" required />
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        <p id="registerError" class="error-msg"></p>
+      </form>
+    </div>
+  </div>
+
+  <div id="appScreen" class="hidden">
+    <div class="container main-content">
+
+      <section id="dashboard" class="section active">
+        <h1>Dashboard</h1>
+        <div class="stats-grid">
+          <div class="stat-card"><h3>Portfolio Views</h3><p id="viewCount" class="stat-value">0</p></div>
+          <div class="stat-card"><h3>Projects</h3><p id="projectCount" class="stat-value">0</p></div>
+          <div class="stat-card">
+            <h3>Your Portfolio URL</h3>
+            <p id="portfolioURL" class="stat-url">Save your portfolio first</p>
+          </div>
+        </div>
+        <div class="suggestions-section">
+          <h2>How to improve</h2>
+          <div id="suggestionsList" class="suggestions-list"></div>
+        </div>
+      </section>
+
+      <section id="portfolio" class="section">
+        <h1>Your Portfolio</h1>
+        <form id="portfolioForm" class="form">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="portfolioTitle" placeholder="My Creative Portfolio" />
+          </div>
+          <div class="form-group">
+            <label>Bio / About you</label>
+            <textarea id="portfolioDesc" placeholder="Tell your story..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Custom URL slug</label>
+            <div class="url-preview">
+              <span class="url-base">yoursite.com/portfolio/</span>
+              <input type="text" id="customURL" placeholder="yourname" />
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Portfolio</button>
+        </form>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="section-header">
+          <h1>Your Work</h1>
+          <button class="btn btn-primary" id="addProjectBtn">+ Add Project</button>
+        </div>
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="project">Projects</button>
+          <button class="filter-btn" data-filter="internship">Internships</button>
+          <button class="filter-btn" data-filter="job">Jobs</button>
+          <button class="filter-btn" data-filter="writing">Writing</button>
+          <button class="filter-btn" data-filter="art">Art</button>
+        </div>
+        <div id="projectsList" class="projects-grid"></div>
+
+        <div id="projectModal" class="modal hidden">
+          <div class="modal-content">
+            <button class="modal-close" id="closeModal">&times;</button>
+            <h2>Add New Project</h2>
+            <form id="projectForm" class="form">
+              <div class="form-group">
+                <label>Title *</label>
+                <input type="text" id="projTitle" required />
+              </div>
+              <div class="form-group">
+                <label>Description</label>
+                <textarea id="projDesc"></textarea>
+              </div>
+              <div class="form-group">
+                <label>Type *</label>
+                <select id="projType" required>
+                  <option value="">Select type</option>
+                  <option value="project">Project</option>
+                  <option value="internship">Internship</option>
+                  <option value="job">Job</option>
+                  <option value="writing">Writing</option>
+                  <option value="art">Art</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Tags (comma separated)</label>
+                <input type="text" id="projTags" placeholder="design, react, writing" />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Live Link</label>
+                  <input type="url" id="projLink" placeholder="https://..." />
+                </div>
+                <div class="form-group">
+                  <label>GitHub</label>
+                  <input type="url" id="projGithub" placeholder="https://github.com/..." />
+                </div>
+              </div>
+              <label class="checkbox-label">
+                <input type="checkbox" id="projFeatured" /> Featured project
+              </label>
+              <button type="submit" class="btn btn-primary btn-full">Add Project</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section id="interests" class="section">
+        <h1>Your Interests</h1>
+        <p class="section-sub">Track YouTube videos and articles to auto-build your interest section.</p>
+        <div class="interest-input-row">
+          <input type="url" id="youtubeLink" placeholder="Paste a YouTube URL..." />
+          <button class="btn btn-primary" id="addYoutubeBtn">Add Video</button>
+        </div>
+        <div id="youtubeList" class="interest-list"></div>
+      </section>
+
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
